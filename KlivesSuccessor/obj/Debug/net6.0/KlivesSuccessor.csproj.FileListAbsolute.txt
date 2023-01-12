@@ -1,0 +1,15 @@
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\bin\Debug\net6.0\KlivesSuccessor.exe
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\bin\Debug\net6.0\KlivesSuccessor.deps.json
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\bin\Debug\net6.0\KlivesSuccessor.runtimeconfig.json
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\bin\Debug\net6.0\KlivesSuccessor.dll
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\bin\Debug\net6.0\KlivesSuccessor.pdb
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\obj\Debug\net6.0\KlivesSuccessor.csproj.AssemblyReference.cache
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\obj\Debug\net6.0\KlivesSuccessor.GeneratedMSBuildEditorConfig.editorconfig
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\obj\Debug\net6.0\KlivesSuccessor.AssemblyInfoInputs.cache
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\obj\Debug\net6.0\KlivesSuccessor.AssemblyInfo.cs
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\obj\Debug\net6.0\KlivesSuccessor.csproj.CoreCompileInputs.cache
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\obj\Debug\net6.0\KlivesSuccessor.dll
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\obj\Debug\net6.0\refint\KlivesSuccessor.dll
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\obj\Debug\net6.0\KlivesSuccessor.pdb
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\obj\Debug\net6.0\KlivesSuccessor.genruntimeconfig.cache
+D:\Development\Projects\Software\KlivesSuccessor\KlivesSuccessor\obj\Debug\net6.0\ref\KlivesSuccessor.dll
