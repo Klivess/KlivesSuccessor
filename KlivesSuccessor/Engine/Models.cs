@@ -9,23 +9,48 @@ namespace KlivesSuccessor.Engine
 {
     class Models
     {
+
+        public struct ChessMove
+        {
+            public Piece pieceMoved;
+            public Piece? pieceTaken;
+            public ChessCoordinates originalCoordinate;
+            public ChessCoordinates newCoordinate;
+            public bool isWhite;
+            public string translatedCoordinate;
+            public ChessMove(Piece movedPiece, ChessCoordinates originalCoord, ChessCoordinates newCoord, bool whiteMove, Piece? takenPiece = null)
+            {
+                pieceMoved = movedPiece;
+                pieceTaken = takenPiece;
+                originalCoordinate = originalCoord;
+                newCoordinate = newCoord;
+                pieceTaken = takenPiece;
+                isWhite= whiteMove;
+                translatedCoordinate = newCoord.TranslatePositionToText();
+            }
+        }
         public struct ChessGame
         {
             public string FEN;
             public string PGN;
-            public Piece[] WhitePieces;
-            public Piece[] BlackPieces;
-
+            public List<Piece> WhitePieces;
+            public List<Piece> BlackPieces;
+            public List<ChessMove> GameMoves;
             public ChessCoordinates[] CalculateOccupiedSquares()
             {
                 List<ChessCoordinates> coords = new();
-                WhitePieces.ToList().ForEach(x => coords.Add(x.Position));
-                BlackPieces.ToList().ForEach(x => coords.Add(x.Position));
+                foreach(var item in WhitePieces.Concat(BlackPieces))
+                {
+                    coords.Add(item.Position);
+                }
                 return coords.ToArray();
             }
 
             public ChessGame ConstructChessGame()
             {
+                GameMoves = new();
+                WhitePieces = new List<Piece>();
+                BlackPieces = new List<Piece>();
                 //Create white pieces in starting position
                 Piece whiteRook1 = new Piece().ConstructPiece(PieceType.Rook, this, new ChessCoordinates().ConstructCoordinates(1, 1), true);
                 Piece whiteKnight1 = new Piece().ConstructPiece(PieceType.Knight, this, new ChessCoordinates().ConstructCoordinates(2, 1), true);
@@ -50,7 +75,6 @@ namespace KlivesSuccessor.Engine
                     Piece pawn = new Piece().ConstructPiece(PieceType.Pawn, this, new ChessCoordinates().ConstructCoordinates(i, 2), true);
                     whitePieces.Add(pawn);
                 }
-                WhitePieces = whitePieces.ToArray();
                 //Create black pieces in starting position
                 Piece blackRook1 = new Piece().ConstructPiece(PieceType.Rook, this, new ChessCoordinates().ConstructCoordinates(1, 8), true);
                 Piece blackKnight1 = new Piece().ConstructPiece(PieceType.Knight, this, new ChessCoordinates().ConstructCoordinates(2, 8), true);
@@ -75,7 +99,6 @@ namespace KlivesSuccessor.Engine
                     Piece pawn = new Piece().ConstructPiece(PieceType.Pawn, this, new ChessCoordinates().ConstructCoordinates(i, 7), true);
                     blackPieces.Add(pawn);
                 }
-                BlackPieces = blackPieces.ToArray();
                 return this;
             }
 
@@ -98,8 +121,32 @@ namespace KlivesSuccessor.Engine
                     {
                         RemovePieceOfID((Piece)attackedpiece);
                     }
+                    var oldPos = piece.Position;
                     piece.Position = newCoord;
+                    ChessMove move = new(piece, oldPos, newCoord, piece.pieceIsWhite, attackedpiece);
+                    GameMoves.Add(move);
+                    RefreshPGN();
                 }
+            }
+
+            public string RefreshPGN()
+            {
+                bool onOff = false;
+                int count = 1;
+                foreach(var move in GameMoves)
+                {
+                    if (onOff)
+                    {
+                        PGN += $" {move.newCoordinate.TranslatePositionToText(move.pieceMoved.Type)}\n";
+                    }
+                    else
+                    {
+                        PGN += $" {count}. " + move.newCoordinate.TranslatePositionToText(move.pieceMoved.Type);
+                        count++;
+                    }
+                    onOff = !onOff;
+                }
+                return PGN;
             }
 
             public Piece? GetPieceAtPosition(ChessCoordinates coordinate)
@@ -119,16 +166,12 @@ namespace KlivesSuccessor.Engine
                 if (piece.pieceIsWhite)
                 {
                     int indexOfPiece = WhitePieces.Select(k => k.ID).ToList().IndexOf(piece.ID);
-                    var newList = WhitePieces.ToList();
-                    newList.RemoveAt(indexOfPiece);
-                    WhitePieces = newList.ToArray();
+                    WhitePieces.RemoveAt(indexOfPiece);
                 }
                 else
                 {
                     int indexOfPiece = BlackPieces.Select(k => k.ID).ToList().IndexOf(piece.ID);
-                    var newList = BlackPieces.ToList();
-                    newList.RemoveAt(indexOfPiece);
-                    BlackPieces = newList.ToArray();
+                    BlackPieces.RemoveAt(indexOfPiece);
                 }
             }
         }
@@ -139,13 +182,15 @@ namespace KlivesSuccessor.Engine
             public ChessCoordinates ConstructCoordinates(int x, int y)
             {
                 X = Math.Clamp(Convert.ToInt32(x), 1, 8);
-                Y = Math.Clamp(Convert.ToInt32(x), 1, 8);
+                Y = Math.Clamp(Convert.ToInt32(y), 1, 8);
                 return this;
             }
-            public string TranslatePositionToText()
+            public string TranslatePositionToText(PieceType? piece = null, bool hasTaken = false)
             {
-                string[] alphabet = { "a", "b", "c", "d", "e", "g", "h" };
-                string position = alphabet[(Convert.ToInt32(Y) - 1)] + X;
+                string[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h" };
+                string[] pieceNames = { "", "B", "N", "R", "Q", "K", "h" };
+                int alphabetCharIndex = (Convert.ToInt32(X) - 1);
+                string position = (piece == null ? "" : pieceNames[(int)piece]) + (hasTaken ? "x" : "") + alphabet[alphabetCharIndex] + Y;
                 return position;
             }
         }
